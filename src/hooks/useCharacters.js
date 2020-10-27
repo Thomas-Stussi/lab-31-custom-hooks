@@ -8,11 +8,28 @@ export const useCharacters = page => {
 
   useEffect(() => {
     getCharacters(page)
-      .then(fetchedCharacters => setCharacters(fetchedCharacters));
+      .then(fetchedCharacters => setCharacters(fetchedCharacters))
+      .finally(() => setLoading(false));
   }, [page]);
 
   return {
     loading,
     characters
+  };
+};
+
+export const useCharacterById = id => {
+  const [loading, setLoading] = useState(true);
+  const [character, setCharacterById] = useState(null);
+
+  useEffect(() => {
+    getCharacterById(id)
+      .then(fetchedCharacter => setCharacterById(fetchedCharacter))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  return {
+    loading,
+    character
   };
 };

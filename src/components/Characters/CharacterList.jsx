@@ -1,9 +1,13 @@
 /* eslint-disable max-len */
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import CharacterItem from './CharacterItem';
+import { useCharacters } from '../../hooks/useCharacters';
 
-const CharacterList = ({ characters }) => {
+const CharacterList = ({ page }) => {
+  const { loading, characters } = useCharacters(page);
+  if(loading) return <h1>Loading...</h1>;
+
   const characterElements = characters.map(character => (
     <li key={character.id}>
       <CharacterItem {...character} />
@@ -18,7 +22,7 @@ const CharacterList = ({ characters }) => {
 };
 
 CharacterList.propTypes = {
-  characters: PropTypes.arrayOf(object).isRequired
+  page: PropTypes.number
 };
 
 export default CharacterList;

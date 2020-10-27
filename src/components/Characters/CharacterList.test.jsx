@@ -1,35 +1,27 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import CharacterList from './CharacterList';
+import { getCharacters } from '../../../services/rickAndMortyApi';
 
-describe('List Component', () => {
-  const characterArray = [{
-    'id': 13,
-    'name': 'Alien Googah',
-    'status': 'unknown',
-    'species': 'Alien',
-    'type': '',
-    'gender': 'unknown',
-    'origin': {
-      'name': 'unknown',
-      'url': ''
-    },
-    'location': {
-      'name': 'Earth (Replacement Dimension)',
-      'url': 'https://rickandmortyapi.com/api/location/20'
-    },
-    'image': 'https://rickandmortyapi.com/api/character/avatar/13.jpeg',
-    'episode': [
-      'https://rickandmortyapi.com/api/episode/31'
-    ],
-    'url': 'https://rickandmortyapi.com/api/character/13',
-    'created': '2017-11-04T20:33:30.779Z'
-  }];
+jest.mock('../../../services/rickAndMortyApi.js');
 
-  it('renders List component', () => {
-    const { asFragment } = render(<CharacterList characters={characterArray} />);
+describe('CharacterList component', () => {
+  it('displays a list of characters after a brief load', async() => {
+    getCharacters.mockResolvedValue([
+      { id: 1, name: 'Rick', imageUrl: 'rick.png' }
+    ]);
+    render(<MemoryRouter>
+      <CharacterList />
+    </MemoryRouter>);
 
-    expect(asFragment()).toMatchSnapshot();
+    screen.getByText('Loading...');
+
+    const characterList = await screen.findByTestId('characters');
+
+    return waitFor(() => {
+      expect(characterList).not.toBeEmptyDOMElement();
+    });
   });
 });
