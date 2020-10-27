@@ -2,6 +2,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import CharacterItem from './CharacterItem';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('Item Component', () => {
   it('renders Item component', () => {
@@ -28,7 +29,7 @@ describe('Item Component', () => {
       'created': '2017-11-04T20:33:30.779Z'
     };
     
-    const { asFragment } = render(<CharacterItem character={testCharacter} />);
+    const { asFragment } = render(<MemoryRouter><CharacterItem character={testCharacter} /></MemoryRouter>);
 
     expect(asFragment()).toMatchSnapshot();
   });
